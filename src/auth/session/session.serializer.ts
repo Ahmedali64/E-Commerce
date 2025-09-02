@@ -11,7 +11,6 @@ export class SessionSerializer extends PassportSerializer {
   constructor(private readonly usersService: UsersService) {
     super();
   }
-
   // Store user ID in session
   serializeUser(
     //This is the full user object that you got after login

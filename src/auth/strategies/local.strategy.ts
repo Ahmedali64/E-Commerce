@@ -2,6 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { UsersService } from '../../users/users.service';
+import { UserResponseDto } from 'src/users/dto/user-response.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -31,6 +33,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
 
     // Return user without password  req.user
-    return this.usersService.excludePassword(user);
+    return plainToClass(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 }
