@@ -1,10 +1,19 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { RegisterUserDTO } from './dto/register.dto';
 import { UserResponseDto } from 'src/users/dto/user-response.dto';
 import { UsersService } from 'src/users/users.service';
 import type { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +26,7 @@ export class AuthController {
   //Login
   @Post('login')
   @UseGuards(LocalAuthGuard)
+  @Throttle({ default: { limit: 5, ttl: 60 } })
   login(@Req() req: Request, @Res() res: Response) {
     if (!req.user) {
       return res.status(400).json({ message: 'User not found for login' });
@@ -25,7 +35,11 @@ export class AuthController {
       if (err) {
         throw err;
       }
-      res.json({ message: 'Logged in successfully', user: req.user });
+      res.json({
+        message: 'Logged in successfully',
+        user: req.user,
+        csrfToken: req.csrfToken(),
+      });
     });
   }
   //Logout
@@ -46,5 +60,10 @@ export class AuthController {
         res.json({ message: 'Logged out successfully' });
       });
     });
+  }
+
+  @Get('csrf-token')
+  getCsrfToken(@Req() req: Request) {
+    return { csrfToken: req.csrfToken() };
   }
 }
