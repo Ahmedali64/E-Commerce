@@ -113,7 +113,7 @@ This project follows a **learning-first roadmap**:
 2. **Logging & Docs** – Logging system, Swagger API docs, rate limiting
 3. **API Design** – Categories, products, vendors modules
 4. **Caching & Performance** – Redis caching, query optimization
-5. **Security & Auth** – JWT, refresh tokens, roles & permissions
+5. **Security & Auth** – Session, roles & permissions
 6. **File Management** – Secure file uploads, image handling
 7. **Database Advanced** – Orders, cart, reviews, inventory
 8. **Real-Time & Jobs** – WebSockets, background job queues
