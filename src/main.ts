@@ -1,4 +1,5 @@
 import { RedisStore as RedisStoreLimit } from 'rate-limit-redis';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { redisClient } from './redis/redis.provider';
 import { ValidationPipe } from '@nestjs/common';
 import rateLimit from 'express-rate-limit';
@@ -84,6 +85,17 @@ async function bootstrap() {
 
   app.use(helmet()); // security headers
   app.use(morgan('dev')); // logs every request
+
+  //Swagger config
+  const config = new DocumentBuilder()
+    .setTitle('My API Doc')
+    .setDescription('This is a doc for my apis')
+    .setVersion('1.0')
+    .addCookieAuth('connect.sid')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 }

@@ -13,7 +13,7 @@ A **production-ready e-commerce backend** built with **NestJS, TypeORM, and MySQ
 - Modular **NestJS architecture** with TypeORM integration
 - **User management** with roles (customer, vendor, admin)
 - **Products, categories, vendors, orders, cart** modules
-- **Authentication & authorization** (JWT, refresh tokens, RBAC)
+- **Authentication & authorization** (session + redis, RBAC)
 - **Validation & custom pipes** for data integrity
 - **Database migrations** for schema versioning
 - **Logging, monitoring, and API documentation**
@@ -94,14 +94,23 @@ CREATE DATABASE your_database_name
 # Run migrations
 npm run typeorm:migration:run
 ```
+### 5. Make sure you have redus running on a container or local before you start
 
-### 5. Start development server
+### 6. Start development server
 
 ```bash
 npm run start:dev
 ```
 
 Server runs on: [http://localhost:3000](http://localhost:3000)
+---
+## API Documentation
+```bash 
+http://localhost:3000/api/docs
+```
+or
+Full API documentation (with example requests and responses) is available here:  
+[View in Postman](https://documenter.getpostman.com/view/21578024/2sB3Hkq1Ga)
 
 ---
 

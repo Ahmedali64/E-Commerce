@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { User } from 'src/users/entities/users.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from '../../users/entities/users.entity';
+import { UsersService } from '../../users/users.service';
 type SessionUser = {
   id: string;
   email: string;
