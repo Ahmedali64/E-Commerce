@@ -1,8 +1,14 @@
+import { ResponseTimeInterceptor } from './common/interceptors/response-time.interceptor';
+import { EmailNormalizationPipe } from './common/pipes/email-normalization.pipe';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { AllExceptionsFilter } from './common/filter/all-exceptions.filter';
+import { AuditInterceptor } from './common/interceptors/audit.interceptor';
+import { TrimStringPipe } from './common/pipes/trim-string.pipe';
 import { RedisStore as RedisStoreLimit } from 'rate-limit-redis';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { redisClient } from './redis/redis.provider';
 import { ValidationPipe } from '@nestjs/common';
-import rateLimit from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit';
 import { RedisStore } from 'connect-redis';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
@@ -41,8 +47,9 @@ async function bootstrap() {
     message: 'Too many requests from this IP',
   });
 
-  //To apply DTO on every req that has a dto
   app.useGlobalPipes(
+    new EmailNormalizationPipe(),
+    new TrimStringPipe(),
     new ValidationPipe({
       whitelist: true, // strips unknown properties
       forbidNonWhitelisted: true, // throws error if extra properties are sent
@@ -75,11 +82,13 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  //CSRF config
   app.use(
     csurf({
       cookie: false, // Use session storage (not cookies)
     }),
   );
+
   //Using the Limiter on every req in the app
   app.use(limiter);
 
@@ -96,6 +105,16 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
+
+  //add a global filter for our exception
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  //add global interceptors
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+    new ResponseTimeInterceptor(),
+    new AuditInterceptor(),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
 }

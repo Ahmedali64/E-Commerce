@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { winstonConfig } from './common/config/winston.config';
+import { WinstonModule } from 'nest-winston';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { APP_GUARD } from '@nestjs/core';
       useFactory: (consfigService: ConfigService): TypeOrmModuleOptions =>
         getDatabaseConfig(consfigService),
     }),
+    WinstonModule.forRoot(winstonConfig),
     AuthModule,
     UsersModule,
   ],

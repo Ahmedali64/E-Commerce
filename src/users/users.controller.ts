@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Logger,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { UserResponseDto } from './dto/user-response.dto';
 import type { AuthenticatedRequest } from 'src/common/interfaces/req-user.interface';
@@ -7,12 +16,16 @@ import { UsersService } from './users.service';
 import { plainToClass } from 'class-transformer';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorResponseDto } from '../common/dto/err-response.dto';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @ApiTags('Users')
 @UseGuards(AuthenticatedGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
+  ) {}
 
   @Get('profile')
   @ApiOperation({ summary: 'Get user profile.' })
@@ -27,6 +40,7 @@ export class UsersController {
     type: ErrorResponseDto,
   })
   getProfile(@Req() req: AuthenticatedRequest): UserResponseDto {
+    this.logger.log(`Fetching profile for userId=${req.user.id}`);
     return plainToClass(UserResponseDto, req.user, {
       excludeExtraneousValues: true,
     });
@@ -48,6 +62,7 @@ export class UsersController {
     @Body() userProfileData: UpdateUserDto,
     @Req() req: AuthenticatedRequest,
   ) {
+    this.logger.warn(`User ${req.user.id} is updating profile`);
     return await this.usersService.updateUserProfile(
       userProfileData,
       req.user.id,
