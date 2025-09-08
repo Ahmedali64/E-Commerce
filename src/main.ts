@@ -47,6 +47,9 @@ async function bootstrap() {
     message: 'Too many requests from this IP',
   });
 
+  //Using the Limiter on every req in the app
+  app.use(limiter);
+
   app.useGlobalPipes(
     new EmailNormalizationPipe(),
     new TrimStringPipe(),
@@ -89,15 +92,12 @@ async function bootstrap() {
     }),
   );
 
-  //Using the Limiter on every req in the app
-  app.use(limiter);
-
   app.use(helmet()); // security headers
   app.use(morgan('dev')); // logs every request
 
   //Swagger config
   const config = new DocumentBuilder()
-    .setTitle('My API Doc')
+    .setTitle('E-commerce Category API')
     .setDescription('This is a doc for my apis')
     .setVersion('1.0')
     .addCookieAuth('connect.sid')

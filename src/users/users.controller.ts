@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Inject,
   Logger,
   Patch,
@@ -30,12 +31,12 @@ export class UsersController {
   @Get('profile')
   @ApiOperation({ summary: 'Get user profile.' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Return user profile.',
     type: UserResponseDto,
   })
   @ApiResponse({
-    status: 401,
+    status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     type: ErrorResponseDto,
   })
@@ -49,12 +50,12 @@ export class UsersController {
   @Patch('profile')
   @ApiOperation({ summary: 'Update user profile.' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Return updated user.',
     type: UserResponseDto,
   })
   @ApiResponse({
-    status: 401,
+    status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
     type: ErrorResponseDto,
   })

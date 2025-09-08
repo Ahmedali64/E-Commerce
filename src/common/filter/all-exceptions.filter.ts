@@ -7,10 +7,9 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-//u can add HttpException here to make it catch http only but this for all exceptions
 @Catch(HttpException)
 export class AllExceptionsFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -22,14 +21,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const message =
       exception instanceof HttpException
-        ? exception.getResponse()
+        ? exception.message
         : 'Internal server error';
 
     response.status(status).json({
-      statusCode: status,
-      path: request.url,
-      timestamp: new Date().toISOString(),
+      success: false,
       message,
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
     });
   }
 }

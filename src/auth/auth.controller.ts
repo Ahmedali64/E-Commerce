@@ -20,10 +20,10 @@ import { AuthenticatedGuard } from './guards/authenticated.guard';
 import { Throttle } from '@nestjs/throttler';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorResponseDto } from 'src/common/dto/err-response.dto';
-import { LoginSuccessDto } from 'src/common/dto/login-success.dto';
-import { LogoutSuccessDto } from 'src/common/dto/logout-success.dto';
-import { LogoutErrorDto } from 'src/common/dto/logout-err.dto';
-import { CsrfTokenDto } from 'src/common/dto/csrf-response.dto';
+import { LoginSuccessDto } from 'src/auth/dto/login-success.dto';
+import { LogoutSuccessDto } from 'src/auth/dto/logout-success.dto';
+import { LogoutErrorDto } from 'src/auth/dto/logout-err.dto';
+import { CsrfTokenDto } from 'src/auth/dto/csrf-response.dto';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @ApiTags('Auth')
