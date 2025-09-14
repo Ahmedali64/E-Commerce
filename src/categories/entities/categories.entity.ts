@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseEntity } from '../../common/entities/base.entity';
+import { Products } from '../../products/entities/products.entity';
 
 @Entity('categories')
 @Index(['parentId'])
@@ -101,6 +102,8 @@ export class Categories extends BaseEntity {
   //It's a number that controls the order categories appear in the ui added by the admin to add like some prio for best selling categories
   sortOrder: number;
 
+  // Relations
+
   @ManyToOne(() => Categories, (category) => category.children, {
     nullable: true,
     onDelete: 'CASCADE',
@@ -112,6 +115,10 @@ export class Categories extends BaseEntity {
     cascade: true,
   })
   children: Categories[];
+
+  // Category → Product (One-to-Many)
+  @OneToMany(() => Products, (product) => product.category)
+  products: Products[];
 
   get isRoot(): boolean {
     return this.parentId === null;

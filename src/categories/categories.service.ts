@@ -20,6 +20,7 @@ export class CategoriesService {
     private readonly categoriesRepo: Repository<Categories>,
   ) {}
 
+  // Get all categories
   async findAll(page: number = 1, limit: number = 10) {
     const skip = (page - 1) * limit;
 
@@ -64,7 +65,6 @@ export class CategoriesService {
       }
     }
 
-    // Create new category
     const category = this.categoriesRepo.create({
       name,
       slug,

@@ -11,6 +11,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { winstonConfig } from './common/config/winston.config';
 import { WinstonModule } from 'nest-winston';
 import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
+import { VendorsModule } from './vendors/vendors.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     UsersModule,
     CategoriesModule,
+    ProductsModule,
+    VendorsModule,
   ],
   controllers: [AppController],
   providers: [

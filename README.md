@@ -18,7 +18,7 @@ A **production-ready e-commerce backend** built with **NestJS, TypeORM, and MySQ
 - **Database migrations** for schema versioning
 - **Logging, monitoring, and API documentation**
 - **File uploads** with image handling
-- **Advanced e-commerce features** (cart, reviews, inventory)
+- **Advanced e-commerce features** (cart, reviews, inventory) \* "Reviews system intentionally omitted to focus on core architecture and deployment"
 - **Redis caching** and background jobs
 - **Real-time notifications** (WebSockets)
 - **Testing strategy** (unit + E2E with TypeORM)
